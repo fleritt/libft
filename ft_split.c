@@ -3,29 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rfleritt <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rfleritt <rfleritt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:29:19 by rfleritt          #+#    #+#             */
-/*   Updated: 2024/10/03 19:20:15 by rfleritt         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:13:22 by rfleritt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char		**ft_free(char **ptr);
+static char		**ft_free(char **ptr, int i);
 static size_t	ft_cd(char const *s, char c);
-static char		**ft_malloc_mem(char const *s, char c);
 static char		**ft_split_malloc(char const *s, char c, char **split);
 
-static char	**ft_free(char **ptr)
+static char	**ft_free(char **ptr, int i)
 {
-	size_t	i;
-
-	i = 0;
-	while (ptr[i])
+	while (i >= 0)
 	{
 		free(ptr[i]);
-		i++;
+		ptr[i] = NULL;
+		i--;
 	}
 	free(ptr);
 	return (NULL);
@@ -47,16 +44,6 @@ static size_t	ft_cd(char const *s, char c)
 	return (j);
 }
 
-static char	**ft_malloc_mem(char const *s, char c)
-{
-	char	**split;
-
-	split = (char **)malloc((ft_cd(s, c) + 1) * sizeof(char *));
-	if (!split)
-		return (NULL);
-	return (split);
-}
-
 static char	**ft_split_malloc(char const *s, char c, char **split)
 {
 	size_t	st;
@@ -68,21 +55,21 @@ static char	**ft_split_malloc(char const *s, char c, char **split)
 	st = 0;
 	while (s[st])
 	{
-		if (s[st] != c)
+		if (s[st] != c && i < ft_cd(s, c))
 		{
 			len = 0;
 			while (s[st + len] && s[st + len] != c)
 				len++;
 			substr = ft_substr(s, st, len);
 			if (!substr)
-				return (ft_free(split));
+				return (ft_free(split, i));
 			split[i++] = substr;
 			st += len;
 		}
 		else
 			st++;
 	}
-	split[i] = NULL;
+	split[i] = 0;
 	return (split);
 }
 
@@ -92,7 +79,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	split = ft_malloc_mem(s, c);
+	split = (char **)ft_calloc((ft_cd(s, c) + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
 	return (ft_split_malloc(s, c, split));

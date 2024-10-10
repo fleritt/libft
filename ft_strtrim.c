@@ -6,7 +6,7 @@
 /*   By: rfleritt <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:20:05 by rfleritt          #+#    #+#             */
-/*   Updated: 2024/09/30 13:38:23 by rfleritt         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:14:05 by rfleritt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ char	*ft_strtrim(char const *s1, char const *set)
 	{
 		j--;
 	}
-	ptr = ft_substr(s1, i, i - j);
+	ptr = ft_substr(s1, i, j - i);
+	if (ptr == NULL)
+		return (NULL);
 	return (ptr);
 }
 

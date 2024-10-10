@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rfleritt <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/20 12:21:21 by rfleritt          #+#    #+#             */
-/*   Updated: 2024/10/03 19:37:30 by rfleritt         ###   ########.fr       */
+/*   Created: 2024/10/05 09:46:44 by rfleritt          #+#    #+#             */
+/*   Updated: 2024/10/09 14:31:17 by rfleritt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	ft_putnbr_fd(int n, int fd)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0')
+	if (n == -2147483648)
 	{
-		if (s[i] == (char)c)
-			return (&((char *)s)[i]);
-		i++;
+		write(fd, "-2147483648", 11);
+		return ;
 	}
-	if ((char)c == '\0')
-		return (&((char *)s)[i]);
-	return (NULL);
+	else if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		n *= -1;
+	}
+	if (n >= 10)
+	{
+		ft_putnbr_fd(n / 10, fd);
+		ft_putchar_fd(n % 10 + '0', fd);
+	}
+	if (n < 10)
+		ft_putchar_fd(n % 10 + '0', fd);
 }
-
-/*int main()
-{
-	const char *s = "tu Mama";
-	printf("%s", ft_strchr(s, 'M'));
-	return (0);
-}*/
